@@ -136,4 +136,8 @@ int Coin::getCurrentCoin() {
     return currentCoin;
 }
 
+void Coin::setCurrentCoin() {
+    currentCoin = 0;
+}
+
 int Coin::currentCoin = 0;

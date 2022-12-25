@@ -12,6 +12,7 @@ extern bool existingEnemy[5];
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 extern SDL_Window* Window;
+extern SDL_Renderer* gameRenderer;
 extern DisplayType gDisplayType;
 extern PlantType gPlantType;
 

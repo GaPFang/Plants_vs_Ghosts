@@ -36,6 +36,7 @@ public:
     void HPdamaged(double damage);
     double getATK();
     double getHP();
+    int getRow();
     //Uint32 getTime();
     //void resetTime();
 };

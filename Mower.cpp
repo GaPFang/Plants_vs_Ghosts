@@ -39,4 +39,4 @@ bool Mower::getMoving() {
 
 const double Mower::width = 100, Mower::height = (double)520 / 5;
 const SDL_Point Mower::gPos = {340, 200};
-const int Mower::M_SPD = 8;
+const int Mower::M_SPD = 5;

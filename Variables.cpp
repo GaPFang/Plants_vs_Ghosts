@@ -10,4 +10,4 @@ bool existingEnemy[5] = {false};
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 SDL_Window* Window = SDL_CreateWindow ("Plants vs Ghosts", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-
+SDL_Renderer* gameRenderer = NULL;

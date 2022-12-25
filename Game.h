@@ -1,6 +1,7 @@
 #ifndef _GAME_H
 #define _GAME_H
 
+#include <ctime>
 #include <stdio.h>
 #include <string>
 #include "SDL.h"
@@ -56,6 +57,7 @@ class Game{
         int eNum[5] = {0};
         int killedeNum[5] = {0};
         int count = 0;
+        time_t num;
     public:
         Game();
         void init();
@@ -69,6 +71,8 @@ class Game{
         void close();
         bool checkCollision(Enemies &enemy, int i, int j);
         void checkCollision(Enemies &enemy, PeaBullet &peaBullet);
+        void checkCollision(Enemies &enemy, Mower &mower);
+        int checkEnding();
 };
 
 #endif // _GAME_H
