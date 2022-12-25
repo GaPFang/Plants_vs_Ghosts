@@ -14,7 +14,7 @@
 #include "Pea.h"
 #include "Nut.h"
 #include "PeaBullet.h"
-#include "Watermelon.h"
+#include "WatermelonGenerator.h"
 #include "Girl.h"
 #include "Ghost.h"
 #include "Mower.h"
@@ -22,6 +22,7 @@
 #include "Shovel.h"
 #include "Coin.h"
 #include "Progress.h"
+#include "Sunflower.h"
 
 extern bool existingEnemy[5];
 
@@ -34,9 +35,12 @@ class Game{
         LTexture pauseBackgroundTexture;
         PlantFollowingMouse plantFollowingMouse[5];
         Grid grid[5][9];
+        Sunflower sunflower[5][9];
         Pea pea[5][9];
         Nut nut[5][9];
-        Watermelon watermelon[5][9];
+        PeaBullet watermelon[5][9];
+        WatermelonGenerator watermelonGeneratorFront[5][9];
+        WatermelonGenerator watermelonGeneratorBack[5][9];
         Girl girl[5][9];
         Mower mower[5];
         Ghost ghost[5][20];
@@ -70,7 +74,7 @@ class Game{
         void clearRender();
         void close();
         bool checkCollision(Enemies &enemy, int i, int j);
-        void checkCollision(Enemies &enemy, PeaBullet &peaBullet);
+        void checkCollision(Enemies &enemy, PeaBullet &peaBullet, PlantType plantType);
         void checkCollision(Enemies &enemy, Mower &mower);
         int checkEnding();
 };

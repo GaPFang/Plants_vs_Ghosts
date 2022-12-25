@@ -18,7 +18,7 @@ class Plants: public Animation{
         double ATK = 10;
         const int price = 100;
         int column, row;
-        AnimationType animationType = MOVING;
+        AnimationType animationType = RESTING;
     public:
         Plants();
         ~Plants();

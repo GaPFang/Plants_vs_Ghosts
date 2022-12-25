@@ -137,7 +137,7 @@ int Coin::getCurrentCoin() {
 }
 
 void Coin::setCurrentCoin() {
-    currentCoin = 0;
+    currentCoin = 50;
 }
 
-int Coin::currentCoin = 0;
+int Coin::currentCoin = 50;

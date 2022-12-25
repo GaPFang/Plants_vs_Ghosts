@@ -22,7 +22,7 @@ enum PlantType {
 enum AnimationType{
     MOVING,
     ATTACKTING,
-    DYING,
+    RESTING,
     ANIMATIONTYPE_TOTAL
 };
 

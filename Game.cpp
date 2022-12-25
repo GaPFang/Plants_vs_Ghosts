@@ -44,26 +44,35 @@ Game::Game(){
             grid[i][j].setRow(i);
             grid[i][j].setColumn(j);
             grid[i][j].setPos();
+            sunflower[i][j].setRow(i);
+            sunflower[i][j].setColumn(j);
+            sunflower[i][j].setPos();
+            sunflower[i][j].setHP(142);
+            sunflower[i][j].setAnimationType(MOVING);
             pea[i][j].setRow(i);
             pea[i][j].setColumn(j);
             pea[i][j].setPos();
-            pea[i][j].setAnimationType(ATTACKTING);
-            pea[i][j].setHP(100);
+            pea[i][j].setHP(142);
             nut[i][j].setRow(i);
             nut[i][j].setColumn(j);
             nut[i][j].setPos();
+            nut[i][j].setHP(142);
             nut[i][j].setAnimationType(MOVING);
-            nut[i][j].setHP(1000);
-            watermelon[i][j].setRow(i);
-            watermelon[i][j].setColumn(j);
-            watermelon[i][j].setPos();
-            watermelon[i][j].setAnimationType(ATTACKTING);
-            watermelon[i][j].setHP(150);
+            watermelonGeneratorFront[i][j].setRow(i);
+            watermelonGeneratorFront[i][j].setColumn(j);
+            watermelonGeneratorFront[i][j].setPos();
+            watermelonGeneratorFront[i][j].setHP(150);
+            watermelonGeneratorBack[i][j].setRow(i);
+            watermelonGeneratorBack[i][j].setColumn(j);
+            watermelonGeneratorBack[i][j].setPos();
+            watermelon[i][j].setStartPosX(watermelonGeneratorFront[i][j].getPos().x);
+            watermelon[i][j].setStartPosY(watermelonGeneratorFront[i][j].getPos().y);
+            watermelon[i][j].setNowPos();
             girl[i][j].setRow(i);
             girl[i][j].setColumn(j);
             girl[i][j].setPos();
             girl[i][j].setAnimationType(ATTACKTING);
-            girl[i][j].setHP(30);
+            girl[i][j].setHP(142);
             for (int k = 0; k < 2; k++) {
                 peaBullet[i][j][k].setStartPosX(pea[i][j].getPos().x + pea[i][j].getWidth() * 2 / 3);
                 peaBullet[i][j][k].setStartPosY(pea[i][j].getPos().y + pea[i][j].getHeight() * 1 / 4);
@@ -108,27 +117,31 @@ void Game::loadMedia() {
         cin >> path;
         commodity[i].loadFromFile("img/backgroundTemp.png", plantRenderer[i]);
 	}*/
-	commodity[0].loadFromFile("img/commodity1.png", gameRenderer);
+	commodity[0].loadFromFile("img/sunflowerShop.png", gameRenderer);
 	commodity[1].loadFromFile("img/appleTreeShop.png", gameRenderer);
-	commodity[2].loadFromFile("img/commodity3.png", gameRenderer);
-	commodity[3].loadFromFile("img/watermelonShop.png", gameRenderer);
+	commodity[2].loadFromFile("img/nutShop.png", gameRenderer);
+	commodity[3].loadFromFile("img/watermelonGeneratorShop.png", gameRenderer);
 	commodity[4].loadFromFile("img/plantGirlShop.png", gameRenderer);
-	plantFollowingMouse[0].loadFromFile("img/commodity1.png", gameRenderer);
+	plantFollowingMouse[0].loadFromFile("img/sunflowerShop.png", gameRenderer);
 	plantFollowingMouse[1].loadFromFile("img/appleTreeShop.png", gameRenderer);
-	plantFollowingMouse[2].loadFromFile("img/commodity3.png", gameRenderer);
-	plantFollowingMouse[3].loadFromFile("img/watermelonShop.png", gameRenderer);
+	plantFollowingMouse[2].loadFromFile("img/nutShop.png", gameRenderer);
+	plantFollowingMouse[3].loadFromFile("img/watermelonGeneratorShop.png", gameRenderer);
 	plantFollowingMouse[4].loadFromFile("img/plantGirlShop.png", gameRenderer);
     for (int i = 0; i < 5; i++) {
         mower[i].loadFromFile("img/mower.png", gameRenderer);
         for (int j = 0; j < 20; j++) {
-        ghost[i][j].animationLoadFromFile("img/whiteGhost.png", gameRenderer);
+            ghost[i][j].animationLoadFromFile("img/whiteGhost.png", gameRenderer);
         }
         for (int j = 0; j < 9; j++) {
-            //grid[i][j].loadFromFile("img/grid.png", gameRenderer);
+            sunflower[i][j].animationLoadFromFile("img/sunflowerAnimation.png", gameRenderer);
             pea[i][j].animationLoadFromFile("img/appleTreeAttack.png", gameRenderer);
-            nut[i][j].animationLoadFromFile("img/blackGhost.png", gameRenderer);
+            pea[i][j].loadFromFile("img/appleTreeShop.png", gameRenderer);
+            nut[i][j].animationLoadFromFile("img/nutStand.png", gameRenderer);
+            watermelonGeneratorFront[i][j].loadFromFile("img/watermelonGeneratorFront.png", gameRenderer);
+            watermelonGeneratorBack[i][j].loadFromFile("img/watermelonGeneratorBack.png", gameRenderer);
             watermelon[i][j].animationLoadFromFile("img/watermelonRolling.png", gameRenderer);
             girl[i][j].animationLoadFromFile("img/plantGirlAttack.png", gameRenderer);
+            girl[i][j].loadFromFile("img/plantGirlShop.png", gameRenderer);
             for (int k = 0; k < 2; k++) {
                 peaBullet[i][j][k].loadFromFile("img/appleBullet.png", gameRenderer);
             }
@@ -170,14 +183,20 @@ void Game::loadMedia() {
             ghost[i][j].setHeight(ghost[i][j].getHeight());
         }
         for (int j = 0; j < 9; j++) {
+            sunflower[i][j].setWidth(sunflower[i][j].getWidth());
+            sunflower[i][j].setHeight(sunflower[i][j].getHeight());
             //grid[i][j].setWidth(grid[i][j].getWidth());
             //grid[i][j].setHeight(grid[i][j].getHeight());
             pea[i][j].setWidth(pea[i][j].getWidth());
             pea[i][j].setHeight(pea[i][j].getHeight());
             nut[i][j].setWidth(nut[i][j].getWidth());
             nut[i][j].setHeight(nut[i][j].getHeight());
-            watermelon[i][j].setWidth(nut[i][j].getWidth());
-            watermelon[i][j].setHeight(nut[i][j].getHeight());
+            watermelonGeneratorFront[i][j].setWidth(watermelonGeneratorFront[i][j].getWidth());
+            watermelonGeneratorFront[i][j].setHeight(watermelonGeneratorFront[i][j].getHeight());
+            //watermelonGeneratorBack[i][j].setWidth(watermelonGeneratorBack[i][j].getWidth());
+            //watermelonGeneratorBack[i][j].setHeight(watermelonGeneratorBack[i][j].getHeight());
+            //watermelon[i][j].setWidth(watermelonGeneratorBack[i][j].getWidth() * 1.5);
+            //watermelon[i][j].setHeight(watermelonGeneratorBack[i][j].getHeight() * 1.5);
             girl[i][j].setWidth(girl[i][j].getWidth());
             girl[i][j].setHeight(girl[i][j].getHeight());
             for (int k = 0; k < 2; k++) {
@@ -241,9 +260,10 @@ void Game::eventPrepare(const SDL_Event& eventListener) {
                     ghost[i][j].setMoving(false);
                 }
                 for (int j = 0; j < 9; j++) {
+                    sunflower[i][j].setHP(100);
                     pea[i][j].setHP(100);
                     nut[i][j].setHP(1000);
-                    watermelon[i][j].setHP(150);
+                    watermelonGeneratorFront[i][j].setHP(150);
                     girl[i][j].setHP(30);
                     for (int k = 0; k < 2; k++) {
                         peaBullet[i][j][k].setNowPos();
@@ -266,12 +286,38 @@ void Game::autoPrepare() {
             shovel.followingMouse();
         }
         for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 9; j++) {
+                pea[i][j].setAnimationType(RESTING);
+                watermelonGeneratorFront[i][j].setAnimationType(RESTING);
+                girl[i][j].setAnimationType(RESTING);
+                if (existingEnemy[i]) {
+                    pea[i][j].setAnimationType(ATTACKTING);
+                    watermelonGeneratorFront[i][j].setAnimationType(ATTACKTING);
+                    if (grid[i][j].getMPlantType() == PEA) {
+                        if (pea[i][j].getFrame() == 180) {
+                            if (peaBullet[i][j][0].getReady()) {
+                                peaBullet[i][j][0].setMoving(true);
+                                peaBullet[i][j][0].setReady(false);
+                            } else if (peaBullet[i][j][1].getReady()) {
+                                peaBullet[i][j][1].setMoving(true);
+                                peaBullet[i][j][1].setReady(false);
+                            }
+                        }
+                    } else if (grid[i][j].getMPlantType() == WATERMELON) {
+                        if (watermelon[i][j].getReady()) {
+                            watermelon[i][j].setMoving(true);
+                            watermelon[i][j].setReady(false);
+                        }
+                    }
+                }
+            }
             if (eNum[i] > killedeNum[i]) existingEnemy[i] = true;
             else existingEnemy[i] = false;
             for (int j = killedeNum[i]; j < 20; j++) {
-                if(ghost[i][j].getMoving() && !checkCollision(ghost[i][j], i, (ghost[i][j].getPos().x - grid[0][0].getPos().x) / grid[0][0].getWidth())) {
+                if(ghost[i][j].getMoving() && !checkCollision(ghost[i][j], i, (ghost[i][j].getPos().x - grid[i][0].getPos().x) / grid[i][0].getWidth())) {
                     ghost[i][j].move();
                 }
+                ghost[i][j].setMoving(false);
                 checkCollision(ghost[i][j], mower[i]);
             }
             if (count < 100){
@@ -296,30 +342,19 @@ void Game::autoPrepare() {
                 mower[i].setMoving(false);
             }
             for (int j = 0; j < 9; j++) {
-                pea[i][j].setAnimationType(MOVING);
-                watermelon[i][j].setAnimationType(MOVING);
-                girl[i][j].setAnimationType(MOVING);
-                if (existingEnemy[i]) {
-                    pea[i][j].setAnimationType(ATTACKTING);
-                    watermelon[i][j].setAnimationType(ATTACKTING);
-                    if (grid[i][j].getMPlantType() == PEA) {
-                        if (pea[i][j].getFrame() == 180) {
-                            if (peaBullet[i][j][0].getReady()) {
-                                peaBullet[i][j][0].setMoving(true);
-                                peaBullet[i][j][0].setReady(false);
-                            } else if (peaBullet[i][j][1].getReady()) {
-                                peaBullet[i][j][1].setMoving(true);
-                                peaBullet[i][j][1].setReady(false);
-                            }
-                        }
-                    }
+                if (watermelon[i][j].getMoving()) {
+                    watermelon[i][j].move();
+                    checkCollision(ghost[i][killedeNum[i]], watermelon[i][j], grid[i][j].getMPlantType());
                 }
-            }
-            for (int j = 0; j < 9; j++) {
+                if (watermelon[i][j].getNowPos().x > SCREEN_WIDTH) {
+                    watermelon[i][j].setNowPos();
+                    watermelon[i][j].setMoving(false);
+                    watermelon[i][j].setReady(true);
+                }
                 for (int k = 0; k < 2; k++) {
                     if (peaBullet[i][j][k].getMoving()) {
                         peaBullet[i][j][k].move();
-                        checkCollision(ghost[i][killedeNum[i]], peaBullet[i][j][k]);
+                        checkCollision(ghost[i][killedeNum[i]], peaBullet[i][j][k], grid[i][j].getMPlantType());
                     }
                     if (peaBullet[i][j][k].getNowPos().x > SCREEN_WIDTH) {
                         peaBullet[i][j][k].setNowPos();
@@ -352,14 +387,26 @@ void Game::renderPresent() {
             mower[i].render(mower[i].getPos().x, mower[i].getPos().y, gameRenderer);
             for (int j = 8; j >= 0; j--) {
                 //grid[i][j].render(grid[i][j].getPos().x, grid[i][j].getPos().y, gameRenderer);
-                if (grid[i][j].getMPlantType() == PEA) {
-                    pea[i][j].animationRender(pea[i][j].getPos().x, pea[i][j].getPos().y, gameRenderer, pea[i][j].getCurrentClip());
+                if (grid[i][j].getMPlantType() == SUNFLOWER) {
+                    sunflower[i][j].animationRender(sunflower[i][j].getPos().x, sunflower[i][j].getPos().y, gameRenderer, sunflower[i][j].getCurrentClip());
+                } else if (grid[i][j].getMPlantType() == PEA) {
+                    if (pea[i][j].getAnimationType() == RESTING) {
+                        pea[i][j].render(girl[i][j].getPos().x, pea[i][j].getPos().y, gameRenderer);
+                    } else {
+                        pea[i][j].animationRender(pea[i][j].getPos().x, pea[i][j].getPos().y, gameRenderer, pea[i][j].getCurrentClip());
+                    }
                 } else if (grid[i][j].getMPlantType() == NUT) {
                     nut[i][j].animationRender(nut[i][j].getPos().x, nut[i][j].getPos().y, gameRenderer, nut[i][j].getCurrentClip());
                 } else if (grid[i][j].getMPlantType() == WATERMELON) {
-                    watermelon[i][j].animationRender(watermelon[i][j].getPos().x, watermelon[i][j].getPos().y, gameRenderer, girl[i][j].getCurrentClip());
+                    watermelonGeneratorBack[i][j].render(watermelonGeneratorBack[i][j].getPos().x, watermelonGeneratorBack[i][j].getPos().y, gameRenderer);
+                    watermelon[i][j].animationRender(watermelon[i][j].getNowPos().x, watermelon[i][j].getNowPos().y, gameRenderer, watermelon[i][j].getCurrentClip());
+                    watermelonGeneratorFront[i][j].render(watermelonGeneratorFront[i][j].getPos().x, watermelonGeneratorFront[i][j].getPos().y, gameRenderer);
                 } else if (grid[i][j].getMPlantType() == GIRL) {
-                    girl[i][j].animationRender(girl[i][j].getPos().x, girl[i][j].getPos().y, gameRenderer, girl[i][j].getCurrentClip());
+                    if (girl[i][j].getAnimationType() == RESTING) {
+                        girl[i][j].render(girl[i][j].getPos().x, girl[i][j].getPos().y, gameRenderer);
+                    } else {
+                        girl[i][j].animationRender(girl[i][j].getPos().x, girl[i][j].getPos().y, gameRenderer, girl[i][j].getCurrentClip());
+                    }
                 }
                 for (int k = 0; k < 2; k++) {
                     if (peaBullet[i][j][k].getMoving()) {
@@ -410,7 +457,12 @@ void Game::renderPresent() {
             mower[i].setAlpha(255);
             for (int j = 8; j >= 0; j--) {
                 //grid[i][j].render(grid[i][j].getPos().x, grid[i][j].getPos().y, gameRenderer);
-                if (grid[i][j].getMPlantType() == PEA) {
+                if (grid[i][j].getMPlantType() == SUNFLOWER) {
+                    for (int i = 0; i < ANIMATIONTYPE_TOTAL; i++)
+                    sunflower[i][j].setAlpha(150);
+                    sunflower[i][j].animationRender(sunflower[i][j].getPos().x, sunflower[i][j].getPos().y, gameRenderer, sunflower[i][j].getCurrentClip());
+                    sunflower[i][j].setAlpha(255);
+                } else if (grid[i][j].getMPlantType() == PEA) {
                     for (int i = 0; i < ANIMATIONTYPE_TOTAL; i++)
                     pea[i][j].setAlpha(150);
                     pea[i][j].animationRender(pea[i][j].getPos().x, pea[i][j].getPos().y, gameRenderer, pea[i][j].getCurrentClip());
@@ -420,9 +472,12 @@ void Game::renderPresent() {
                     nut[i][j].animationRender(nut[i][j].getPos().x, nut[i][j].getPos().y, gameRenderer, nut[i][j].getCurrentClip());
                     nut[i][j].setAlpha(255);
                 } else if (grid[i][j].getMPlantType() == WATERMELON) {
-                    watermelon[i][j].setAlpha(150);
-                    watermelon[i][j].animationRender(watermelon[i][j].getPos().x, watermelon[i][j].getPos().y, gameRenderer, girl[i][j].getCurrentClip());
-                    watermelon[i][j].setAlpha(255);
+                    watermelonGeneratorBack[i][j].setAlpha(150);
+                    watermelonGeneratorBack[i][j].render(watermelonGeneratorBack[i][j].getPos().x, watermelonGeneratorBack[i][j].getPos().y, gameRenderer);
+                    watermelonGeneratorBack[i][j].setAlpha(255);
+                    watermelonGeneratorFront[i][j].setAlpha(150);
+                    watermelonGeneratorFront[i][j].render(watermelonGeneratorFront[i][j].getPos().x, watermelonGeneratorFront[i][j].getPos().y, gameRenderer);
+                    watermelonGeneratorFront[i][j].setAlpha(255);
                 } else if (grid[i][j].getMPlantType() == GIRL) {
                     girl[i][j].setAlpha(150);
                     girl[i][j].animationRender(girl[i][j].getPos().x, girl[i][j].getPos().y, gameRenderer, girl[i][j].getCurrentClip());
@@ -461,6 +516,12 @@ void Game::clearRender(){
 
 bool Game::checkCollision(Enemies &enemy, int i, int j){
     bool collided = false;
+
+    if(j < 0 || j > 8) {
+        collided = false;
+        return collided;
+    }
+
     if (grid[i][j].getMPlantType() != PLANT_TOTAL){    // change 1200 to the width of the image blat on the screen
         collided = true;
         /*if(enemy.ID == nutInvulnerableGhost && grid.getMPlantType() == NUT){        // nut & nutInvulnerableGhost are enum elements, maybe change(format) enum elements later
@@ -471,8 +532,10 @@ bool Game::checkCollision(Enemies &enemy, int i, int j){
             if (grid[i][j].getMPlantType() == GIRL) girl[i][j].setAnimationType(ATTACKTING);
             switch(grid[i][j].getMPlantType()) {
                 case PEA:
+
                     pea[i][j].HPdamaged(enemy.getATK());
                     if (pea[i][j].getHP() <= 0) {
+
                         grid[i][j].setMPlantType(PLANT_TOTAL);
                         pea[i][j].setHP(100);
                     }
@@ -481,14 +544,14 @@ bool Game::checkCollision(Enemies &enemy, int i, int j){
                     nut[i][j].HPdamaged(enemy.getATK());
                     if (nut[i][j].getHP() <= 0) {
                         grid[i][j].setMPlantType(PLANT_TOTAL);
-                        nut[i][j].setHP(1000);
+                        nut[i][j].setHP(142);
                     }
                     break;
                 case WATERMELON:
-                    watermelon[i][j].HPdamaged(enemy.getATK());
-                    if (watermelon[i][j].getHP() <= 0) {
+                    watermelonGeneratorFront[i][j].HPdamaged(enemy.getATK());
+                    if (watermelonGeneratorFront[i][j].getHP() <= 0) {
                         grid[i][j].setMPlantType(PLANT_TOTAL);
-                        watermelon[i][j].setHP(150);
+                        watermelonGeneratorFront[i][j].setHP(150);
                     }
                     break;
                 case GIRL:
@@ -496,7 +559,7 @@ bool Game::checkCollision(Enemies &enemy, int i, int j){
                     enemy.HPdamaged(girl[i][j].getATK());
                     if (girl[i][j].getHP() <= 0) {
                         grid[i][j].setMPlantType(PLANT_TOTAL);
-                        girl[i][j].setHP(30);
+                        girl[i][j].setHP(142);
                     }
                     break;
         }
@@ -504,13 +567,15 @@ bool Game::checkCollision(Enemies &enemy, int i, int j){
     return collided;
 }
 
-void Game::checkCollision(Enemies &enemy, PeaBullet &peaBullet){
+void Game::checkCollision(Enemies &enemy, PeaBullet &peaBullet, PlantType plantType){
     if(peaBullet.getNowPos().x - enemy.getPos().x > enemy.getWidth() / 4 && peaBullet.getNowPos().x - enemy.getPos().x < enemy.getWidth() * 3 / 4){
         enemy.HPdamaged(peaBullet.getATK());
         //-----------resetting peaBullet-----------
-        peaBullet.setNowPos();
-        peaBullet.setMoving(false);
-        peaBullet.setReady(true);
+        if (plantType == PEA) {
+            peaBullet.setNowPos();
+            peaBullet.setMoving(false);
+            peaBullet.setReady(true);
+        }
         //-----------------------------------------
         if(enemy.getHP() <= 0){
             killedeNum[enemy.getRow()]++;
@@ -521,7 +586,7 @@ void Game::checkCollision(Enemies &enemy, PeaBullet &peaBullet){
 }
 
 void Game::checkCollision(Enemies &enemy, Mower &mower){
-    if(enemy.getPos().x - mower.getPos().x < mower.getWidth() * 3 / 4 && enemy.getPos().x < SCREEN_WIDTH - 600){
+    if(enemy.getPos().x - mower.getPos().x < mower.getWidth() * 3 / 4 && enemy.getPos().x - mower.getPos().x > 0 && enemy.getPos().x < SCREEN_WIDTH){
         killedeNum[enemy.getRow()]++;
         enemy.setPos();
         enemy.setMoving(false);

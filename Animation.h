@@ -54,7 +54,7 @@ class Animation: public LTexture{
         int frame = 0;
         //bool start = false;
         AnimationType animationType = MOVING;
-        SDL_Texture* gSpriteSheetTexture[ANIMATIONTYPE_TOTAL] = {NULL};
+        SDL_Texture* gSpriteSheetTexture = NULL;
         SDL_Rect gSpriteClips[ANIMATION_FRAMES];
 };
 

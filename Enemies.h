@@ -13,7 +13,7 @@ protected:
     static const int M_SPD;
     SDL_Point mPos;
     double HP = 100;
-    const double ATK = 0.7;
+    const double ATK = 0.1;
     int row;
     int ID;
     bool ready = 1;
