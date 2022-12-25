@@ -20,6 +20,10 @@ SDL_Point Grid::getPos() {
     return mPos;
 }
 
+void Grid::setMPlantType(PlantType t) {
+    mPlantType = t;
+}
+
 void Grid::setColumn(int c) {
     column = c;
 }
@@ -60,13 +64,6 @@ void Grid::handleEvent(const SDL_Event& eventListener) {
     }
 }
 void Grid::resetCollide(){}
-int Grid::getmPosX(){
-    return mPos.x;
-}
-
-int Grid::getmPosY(){
-    return mPos.y;
-}
 
 int Grid::getRow(){
     return row;

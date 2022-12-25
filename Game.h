@@ -66,7 +66,7 @@ class Game{
         void renderPresent();
         void clearRender();
         void close();
-        void checkCollision(Enemies &enemy, Grid &grid);
+        bool checkCollision(Enemies &enemy, int i, int j);
         void checkCollision(Enemies &enemy, PeaBullet &peaBullet);
 };
 

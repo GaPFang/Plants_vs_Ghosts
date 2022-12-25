@@ -29,14 +29,23 @@ void Plants::setPos() {
     mPos.y = gPos.y + height * row + (height - width) / 2;
 }
 
-void Plants::HPdamaged (int damage) {HP -= damage;}
+void Plants::setHP(double hp) {
+    HP = hp;
+}
 
-int Plants::getHP(){
+void Plants::setATK(double atk) {
+    ATK = atk;
+}
+
+void Plants::HPdamaged (double damage) {HP -= damage;}
+
+double Plants::getHP(){
     return HP;
 }
 
-int Plants::getATK(){
+double Plants::getATK(){
     return ATK;
 }
+
 const double Plants::width = (double)740 / 9, Plants::height = (double)520 / 5;
 const SDL_Point Plants::gPos = {436, 200};

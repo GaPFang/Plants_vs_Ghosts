@@ -5,7 +5,7 @@
 
 class Watermelon: public Plants{
     private:
-        AnimationType animationType = ATTACKTING;
+        int HP = 150;
     public:
         Watermelon();
         ~Watermelon();

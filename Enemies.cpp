@@ -41,7 +41,15 @@ void Enemies::move() {
     mPos.x -= M_SPD;
 }
 
-void Enemies::HPdamaged(int damage) {HP -= damage;}
+double Enemies::getATK(){
+    return ATK;
+}
+
+double Enemies::getHP() {
+    return HP;
+}
+
+void Enemies::HPdamaged(double damage) {HP -= damage;}
 
 const int Enemies::M_SPD = 1;
 const double Enemies::width = (double)740 / 9, Enemies::height = (double)520 / 5;

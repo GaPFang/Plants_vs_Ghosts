@@ -5,7 +5,7 @@
 
 class Girl: public Plants{
     private:
-        AnimationType animationType = ATTACKTING;
+        int HP = 30;
     public:
         Girl();
         ~Girl();

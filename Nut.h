@@ -5,7 +5,7 @@
 
 class Nut: public Plants{
     private:
-        AnimationType animationType = MOVING;
+        int HP = 1000;
     public:
         Nut();
         ~Nut();
