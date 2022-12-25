@@ -79,4 +79,3 @@ const double Commodity::width = 90, Commodity::height = 90;
 //bool Commodity::isSelling = false;
 
 
-

@@ -38,11 +38,12 @@ void Enemies::setPos() {
 }
 
 void Enemies::move() {
-    mPos.x -= A_SPD;
+    mPos.x -= M_SPD;
 }
 
 void Enemies::HPdamaged(int damage) {HP -= damage;}
 
+const int Enemies::M_SPD = 1;
 const double Enemies::width = (double)740 / 9, Enemies::height = (double)520 / 5;
 const SDL_Point Enemies::gPos = {436, 200};
 
