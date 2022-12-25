@@ -34,15 +34,13 @@ class Grid {
         double getHeight();
         PlantType getMPlantType();
         SDL_Point getPos();
+        void setMPlantType(PlantType);
         void setColumn(int);
         void setRow(int);
         void setPos();
         int getRow();
         int getColumn();
-        int getmPosX();
-        int getmPosY();
         void handleEvent (const SDL_Event&);
-        void setMPlantType(PlantType t);
         void collide();
         void resetCollide();
 };

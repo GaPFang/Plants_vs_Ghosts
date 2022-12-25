@@ -9,7 +9,7 @@ void Progress::render( int x, int y, SDL_Renderer* currentRenderer, SDL_Rect* cl
 		renderQuad.w = clip->w;
 		renderQuad.h = clip->h;
 	}
-	SDL_RenderCopyEx( currentRenderer, getmTexture(), clip, &renderQuad, angle, center, flip );
+	SDL_RenderCopyEx( currentRenderer, getmTexture(), NULL, &renderQuad, angle, center, flip );
 }
 
 void Progress::progressBarInit(){
@@ -21,19 +21,20 @@ void Progress::setGameLength(Uint32 length){
     gameLength = length;
 }
 
-
-
 void Progress::setTicksAfterStart(){
     if(gDisplayType == MENU){
         ticksAfterStart = SDL_GetTicks();
     } else if(gDisplayType == PAUSE){
+        std::cout << "Paused!" << std::endl;
         if(pauseTickDefined == false){
             pauseTickDefined = true;
             pauseTick = SDL_GetTicks();
+            std::cout << "Pause tick acquired!" << std::endl;
         }
     } else if(gDisplayType == MAINGAME && pauseTickDefined == true){
         pauseTickDefined = false;
         ticksAfterStart += SDL_GetTicks() - pauseTick;
+        std::cout << "New tickAfterStart = " << ticksAfterStart << std::endl;
     } else if(gameStarted == false && gDisplayType == MAINGAME){
         gameStarted = true;
         ticksAfterStart = SDL_GetTicks();
@@ -46,7 +47,7 @@ void Progress::setProgress(){
         progressClip.w = 0;
     } else if(gDisplayType == MAINGAME){
         if(progressClip.w < 320 && gDisplayType == MAINGAME){
-            progressClip.w = 320 * (SDL_GetTicks() - ticksAfterStart) / gameLength;
+            progressClip.w = 320 * double((SDL_GetTicks() - ticksAfterStart)) / double(gameLength);
         }
     }
 

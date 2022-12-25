@@ -7,16 +7,18 @@
 #include "SDL2/SDL_image.h"
 
 #include "Animation.h"
+#include "Enum.h"
 
 class Plants: public Animation{
     protected:
         static const double width, height;
         static const SDL_Point gPos;
         SDL_Point mPos;
-        int HP = 100;
-        const int ATK = 10;
+        double HP = 100;
+        double ATK = 10;
         const int price = 100;
         int column, row;
+        AnimationType animationType = MOVING;
     public:
         Plants();
         ~Plants();
@@ -26,9 +28,11 @@ class Plants: public Animation{
         void setColumn(int);
         void setRow(int);
         void setPos();
-        void HPdamaged(int);
-        int getHP();
-        int getATK();
+        void setHP(double);
+        void setATK(double);
+        void HPdamaged(double);
+        double getHP();
+        double getATK();
 };
 
 #endif // _PLANTS_H

@@ -47,18 +47,22 @@ Game::Game(){
             pea[i][j].setColumn(j);
             pea[i][j].setPos();
             pea[i][j].setAnimationType(ATTACKTING);
+            pea[i][j].setHP(100);
             nut[i][j].setRow(i);
             nut[i][j].setColumn(j);
             nut[i][j].setPos();
             nut[i][j].setAnimationType(MOVING);
+            nut[i][j].setHP(1000);
             watermelon[i][j].setRow(i);
             watermelon[i][j].setColumn(j);
             watermelon[i][j].setPos();
             watermelon[i][j].setAnimationType(ATTACKTING);
+            watermelon[i][j].setHP(150);
             girl[i][j].setRow(i);
             girl[i][j].setColumn(j);
             girl[i][j].setPos();
             girl[i][j].setAnimationType(ATTACKTING);
+            girl[i][j].setHP(30);
             for (int k = 0; k < 2; k++) {
                 peaBullet[i][j][k].setStartPosX(pea[i][j].getPos().x + pea[i][j].getWidth() * 2 / 3);
                 peaBullet[i][j][k].setStartPosY(pea[i][j].getPos().y + pea[i][j].getHeight() * 1 / 4);
@@ -232,7 +236,7 @@ void Game::eventPrepare(const SDL_Event& eventListener) {
 
 void Game::autoPrepare() {
     if (gDisplayType == MAINGAME) {
-        coin.coinCountUp();
+        //coin.coinCountUp();
         progressBar.setTicksAfterStart();
         progressBar.setProgress();
         if (gPlantType != PLANT_TOTAL) {
@@ -245,7 +249,7 @@ void Game::autoPrepare() {
             if (eNum[i] > killedeNum[i]) existingEnemy[i] = true;
             else existingEnemy[i] = false;
             for (int j = 0; j < 20; j++) {
-                if(ghost[i][j].getMoving()) {
+                if(ghost[i][j].getMoving() && !checkCollision(ghost[i][j], i, (ghost[i][j].getPos().x - grid[0][0].getPos().x) / grid[0][0].getWidth())) {
                     ghost[i][j].move();
                 }
             }
@@ -260,12 +264,13 @@ void Game::autoPrepare() {
                 mower[i].setMoving(false);
                 mower[i].~Mower();
             }
-            if (existingEnemy[i]) {
-                for (int j = 0; j < 9; j++) {
+            for (int j = 0; j < 9; j++) {
+                pea[i][j].setAnimationType(MOVING);
+                watermelon[i][j].setAnimationType(MOVING);
+                girl[i][j].setAnimationType(MOVING);
+                if (existingEnemy[i]) {
                     pea[i][j].setAnimationType(ATTACKTING);
-                    nut[i][j].setAnimationType(ATTACKTING);
                     watermelon[i][j].setAnimationType(ATTACKTING);
-                    girl[i][j].setAnimationType(ATTACKTING);
                     if (grid[i][j].getMPlantType() == PEA) {
                         if (pea[i][j].getFrame() == 60) {
                             if (peaBullet[i][j][0].getReady()) {
@@ -277,13 +282,6 @@ void Game::autoPrepare() {
                             }
                         }
                     }
-                }
-            } else {
-                for (int j = 0; j < 9; j++) {
-                    pea[i][j].setAnimationType(MOVING);
-                    nut[i][j].setAnimationType(MOVING);
-                    watermelon[i][j].setAnimationType(MOVING);
-                    girl[i][j].setAnimationType(MOVING);
                 }
             }
             for (int j = 0; j < 9; j++) {
@@ -365,6 +363,8 @@ void Game::renderPresent() {
         pauseButton.setAlpha(150);
         pauseButton.render(pauseButton.getPos().x, pauseButton.getPos().y, gameRenderer);
         pauseButton.setAlpha(255);
+        progressBar.setTicksAfterStart();
+
         for (int i = 0; i < PLANT_TOTAL; i++) {
             commodity[i].setAlpha(150);
             commodity[i].render(commodity[i].getMPos().x, commodity[i].getMPos().y, gameRenderer);
@@ -425,66 +425,53 @@ void Game::clearRender(){
 
 }
 
-/*void Game::checkCollision(Enemies &enemy, Grid &grid){
-    if (enemy.x - grid.getmPosX()  < 1200 && enemy.x - grid.getmPosY() > 0 && grid.getMPlantType() != PLANT_TOTAL){    // change 1200 to the width of the image blat on the screen
-        if(enemy.ID == nutInvulnerableGhost && grid.getMPlantType() == NUT){        // nut & nutInvulnerableGhost are enum elements, maybe change(format) enum elements later
+bool Game::checkCollision(Enemies &enemy, int i, int j){
+    bool collided = false;
+    if (grid[i][j].getMPlantType() != PLANT_TOTAL){    // change 1200 to the width of the image blat on the screen
+        collided = true;
+        /*if(enemy.ID == nutInvulnerableGhost && grid.getMPlantType() == NUT){        // nut & nutInvulnerableGhost are enum elements, maybe change(format) enum elements later
             enemy.resetCollide();
-            grid.resetCollide();
-        } else {
-            enemy.collide();  // change this back to true when one of the two colliding objects died
-            grid.collide();
-
-            if(enemy.getFrame() == 100){
-                switch(grid.getMPlantType()){
-                    case 0:
-                    pea[grid.getRow()][grid.getColumn()].HPdamaged(enemy.getATK());
-                    if(pea[grid.getRow()][grid.getColumn()].getHP() <= 0){
-                        grid.resetCollide();
-                        enemy.resetCollide();
-                        grid.setMPlantType(PLANT_TOTAL);
+            grid[i][j].resetCollide();
+        } else {*/
+            enemy.setAnimationType(ATTACKTING);  // change this back to true when one of the two colliding objects died
+            if (grid[i][j].getMPlantType() == GIRL) girl[i][j].setAnimationType(ATTACKTING);
+            switch(grid[i][j].getMPlantType()) {
+                case PEA:
+                    pea[i][j].HPdamaged(enemy.getATK());
+                    if (pea[i][j].getHP() <= 0) {
+                        grid[i][j].setMPlantType(PLANT_TOTAL);
+                        pea[i][j].setHP(100);
                     }
                     break;
-                    case 1:
-                    nut[grid.getRow()][grid.getColumn()].HPdamaged(enemy.getATK());
-                    if(nut[grid.getRow()][grid.getColumn()].getHP() <= 0){
-                        grid.resetCollide();
-                        enemy.resetCollide();
-                        grid.setMPlantType(PLANT_TOTAL);
+                case NUT:
+                    nut[i][j].HPdamaged(enemy.getATK());
+                    if (nut[i][j].getHP() <= 0) {
+                        grid[i][j].setMPlantType(PLANT_TOTAL);
+                        nut[i][j].setHP(1000);
                     }
                     break;
-                    case 2:
-                    girl[grid.getRow()][grid.getColumn()].HPdamaged(enemy.getATK());
-                    if(girl[grid.getRow()][grid.getColumn()].getHP() <= 0){
-                        grid.resetCollide();
-                        enemy.resetCollide();
-                        grid.setMPlantType(PLANT_TOTAL);
+                case WATERMELON:
+                    watermelon[i][j].HPdamaged(enemy.getATK());
+                    if (watermelon[i][j].getHP() <= 0) {
+                        grid[i][j].setMPlantType(PLANT_TOTAL);
+                        watermelon[i][j].setHP(150);
                     }
                     break;
-                    default:
-                        break;
-                }
-            }
-
-            switch(grid.getMPlantType()){
-                case 2:
-                    if(girl[grid.getRow()][grid.getColumn()].getFrame() == 100){
-                        enemy.HPdamaged(girl[grid.getRow()][grid.getColumn()].getATK());
-                        if(enemy.getHP() <= 0){
-                            grid.resetCollide();
-                            enemy.collide();
-                            //enemy dies
-                        }
+                case GIRL:
+                    girl[i][j].HPdamaged(enemy.getATK());
+                    enemy.HPdamaged(girl[i][j].getATK());
+                    if (girl[i][j].getHP() <= 0) {
+                        grid[i][j].setMPlantType(PLANT_TOTAL);
+                        girl[i][j].setHP(30);
                     }
                     break;
-                default:
-                    break;
-                }
-            }
         }
     }
+    return collided;
+}
 
 void Game::checkCollision(Enemies &enemy, PeaBullet &peaBullet){
-    if(enemy.x - peaBullet.getnowPosX() == 10){
+    if(peaBullet.getNowPos().x - enemy.getPos().x > enemy.getWidth() / 4 && peaBullet.getNowPos().x - enemy.getPos().x < enemy.getWidth() * 3 / 4){
         enemy.HPdamaged(peaBullet.getATK());
         //-----------resetting peaBullet-----------
         peaBullet.setNowPos();
@@ -492,7 +479,7 @@ void Game::checkCollision(Enemies &enemy, PeaBullet &peaBullet){
         peaBullet.setReady(true);
         //-----------------------------------------
         if(enemy.getHP() <= 0){
-            //enemy dies
+
         }
     }
-}*/
+}

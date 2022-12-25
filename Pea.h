@@ -5,7 +5,7 @@
 
 class Pea: public Plants{
     private:
-        AnimationType animationType = MOVING;
+        int HP = 100;
     public:
         Pea();
         ~Pea();

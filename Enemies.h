@@ -12,8 +12,8 @@ protected:
     static const SDL_Point gPos;
     static const int M_SPD;
     SDL_Point mPos;
-    int HP = 100;
-    const int ATK = 10;
+    double HP = 100;
+    const double ATK = 0.7;
     int row;
     int ID;
     bool ready = 1;
@@ -33,7 +33,9 @@ public:
     void setPos();
     void move();
     bool collided;
-    void HPdamaged(int damage);
+    void HPdamaged(double damage);
+    double getATK();
+    double getHP();
     //Uint32 getTime();
     //void resetTime();
 };
