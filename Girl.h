@@ -5,8 +5,9 @@
 
 class Girl: public Plants{
     private:
-        int HP = 30;
+
     public:
+        int HP = 142;
         Girl();
         ~Girl();
 };

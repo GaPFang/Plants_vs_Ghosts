@@ -5,9 +5,9 @@
 #include <string>
 #include "SDL.h"
 
-#include "LTexture.h"
+#include "Animation.h"
 
-class PeaBullet: public LTexture{
+class PeaBullet: public Animation{
     private:
         static const double width, height;
         static int ATK;

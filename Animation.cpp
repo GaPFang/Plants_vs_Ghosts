@@ -64,7 +64,7 @@ void Animation::animationRender( int x, int y, SDL_Renderer *currentRenderer, SD
 	}*/
 
 	//Render to screen
-	SDL_RenderCopy( currentRenderer, gSpriteSheetTexture[animationType], clip, &renderQuad );
+	SDL_RenderCopy( currentRenderer, gSpriteSheetTexture, clip, &renderQuad );
 }
 
 int Animation::getWidth(){
@@ -76,9 +76,7 @@ int Animation::getHeight(){
 }
 
 void Animation::setAlpha(Uint8 alpha) {
-    for (int i = 0; i < ANIMATIONTYPE_TOTAL; i++) {
-        SDL_SetTextureAlphaMod( gSpriteSheetTexture[i], alpha);
-    }
+    SDL_SetTextureAlphaMod( gSpriteSheetTexture, alpha);
 }
 
 /* bool Animation::init(){
@@ -109,10 +107,9 @@ void Animation::animationLoadFromFile(std::string src, SDL_Renderer *gRenderer){
     //Get rid of preexisting texture
 	free();
 	//The final texture
-	SDL_Texture* newTexture[ANIMATIONTYPE_TOTAL] = {NULL};
+	SDL_Texture* newTexture = NULL;
 
 	//Load image at specified path
-	for (int i = 0; i < ANIMATIONTYPE_TOTAL; i++) {
         SDL_Surface* loadedSurface = IMG_Load( src.c_str() );
         if( loadedSurface == NULL )
         {
@@ -120,35 +117,34 @@ void Animation::animationLoadFromFile(std::string src, SDL_Renderer *gRenderer){
         }
         else
         {
-            /*SDL_Rect stretchRect;
-            stretchRect.x = 0;
-            stretchRect.y = 0;
-            stretchRect.w = BUTTON_WIDTH;
-            stretchRect.h = BUTTON_HEIGHT;
-            SDL_BlitScaled( loadedSurface, NULL, loadedSurface, &stretchRect );*/
+        /*SDL_Rect stretchRect;
+        stretchRect.x = 0;
+        stretchRect.y = 0;
+        stretchRect.w = BUTTON_WIDTH;
+        stretchRect.h = BUTTON_HEIGHT;
+        SDL_BlitScaled( loadedSurface, NULL, loadedSurface, &stretchRect );*/
 
-            //Color key image
-            SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
+        //Color key image
+        SDL_SetColorKey( loadedSurface, SDL_TRUE, SDL_MapRGB( loadedSurface->format, 0, 0xFF, 0xFF ) );
 
-            //Create texture from surface pixels
-            newTexture[i] = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
-            if( newTexture[i] == NULL )
-            {
-                printf( "Unable to create texture from %s! SDL Error: %s\n", src.c_str(), SDL_GetError() );
-            }
-            else
-            {
-                //Get image dimensions
-                mWidth = loadedSurface->w;
-                mHeight = loadedSurface->h;
-            }
-
-            //Get rid of old loaded surface
-            SDL_FreeSurface( loadedSurface );
+        //Create texture from surface pixels
+        newTexture = SDL_CreateTextureFromSurface( gRenderer, loadedSurface );
+        if( newTexture == NULL )
+        {
+            printf( "Unable to create texture from %s! SDL Error: %s\n", src.c_str(), SDL_GetError() );
+        }
+        else
+        {
+            //Get image dimensions
+            mWidth = loadedSurface->w;
+            mHeight = loadedSurface->h;
         }
 
-        gSpriteSheetTexture[i] = newTexture[i];
-	}
+        //Get rid of old loaded surface
+        SDL_FreeSurface( loadedSurface );
+    }
+
+    gSpriteSheetTexture = newTexture;
 	for(int i = 0; i < ANIMATION_FRAMES; i++){
         gSpriteClips[ i ].x = (i % 5) * mWidth / 5;
         gSpriteClips[ i ].y = (i / 5) * mHeight / 4;
@@ -159,12 +155,7 @@ void Animation::animationLoadFromFile(std::string src, SDL_Renderer *gRenderer){
 
 void Animation::free(){
 	//Free texture if it exists
-	for (int i = 0; i < ANIMATIONTYPE_TOTAL; i++){
-        SDL_DestroyTexture(gSpriteSheetTexture[i]);
-    }
-    for (int i = 0; i < ANIMATION_FRAMES; i++) {
-        gSpriteSheetTexture[i] = NULL;
-    }
+    SDL_DestroyTexture(gSpriteSheetTexture);
     mWidth = 0;
     mHeight = 0;
     //texture.resetmTexture();

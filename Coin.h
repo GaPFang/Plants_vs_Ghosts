@@ -30,7 +30,7 @@ class Coin: public LTexture{
         bool loadFromRenderedText( std::string textureText, SDL_Renderer* gRenderer, SDL_Color textColor = {1, 1, 1} );
         bool pauseTickDefined = false;
         bool gameStarted = false;
-        Uint32 pauseTick = 0;
+        Uint32 pauseTick = 50;
         static int currentCoin;
         Uint32 coinInterval = 7000;
         SDL_Rect coinRect;
