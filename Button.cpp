@@ -20,11 +20,12 @@ SDL_Point Button::getPos(){
     return pos;
 }
 
-void Button::handleEvent(const SDL_Event &eventListener) {
+bool Button::handleEvent(const SDL_Event &eventListener) {
+    bool inside = false;
     if (eventListener.type == SDL_MOUSEBUTTONDOWN) {
+        inside = true;
         int x, y;
         SDL_GetMouseState( &x, &y );
-        bool inside = true;
         if (x < pos.x) inside = false;
         else if (x > pos.x + mWidth) inside = false;
         else if (y < pos.y) inside = false;
@@ -46,6 +47,7 @@ void Button::handleEvent(const SDL_Event &eventListener) {
             }
         }
     }
+    return inside;
 }
 
 void Button::setMDisplayType(DisplayType m) {

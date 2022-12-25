@@ -1,6 +1,7 @@
 #include "Game.h"
 
 Game::Game(){
+    time(&num);
     playButton.setPosX(350);
     playButton.setPosY(80);
     playButton.setMDisplayType(LEVEL_SELECTION);
@@ -108,12 +109,12 @@ void Game::loadMedia() {
         commodity[i].loadFromFile("img/backgroundTemp.png", plantRenderer[i]);
 	}*/
 	commodity[0].loadFromFile("img/commodity1.png", gameRenderer);
-	commodity[1].loadFromFile("img/commodity2.png", gameRenderer);
+	commodity[1].loadFromFile("img/appleTreeShop.png", gameRenderer);
 	commodity[2].loadFromFile("img/commodity3.png", gameRenderer);
 	commodity[3].loadFromFile("img/watermelonShop.png", gameRenderer);
 	commodity[4].loadFromFile("img/plantGirlShop.png", gameRenderer);
 	plantFollowingMouse[0].loadFromFile("img/commodity1.png", gameRenderer);
-	plantFollowingMouse[1].loadFromFile("img/commodity2.png", gameRenderer);
+	plantFollowingMouse[1].loadFromFile("img/appleTreeShop.png", gameRenderer);
 	plantFollowingMouse[2].loadFromFile("img/commodity3.png", gameRenderer);
 	plantFollowingMouse[3].loadFromFile("img/watermelonShop.png", gameRenderer);
 	plantFollowingMouse[4].loadFromFile("img/plantGirlShop.png", gameRenderer);
@@ -124,12 +125,12 @@ void Game::loadMedia() {
         }
         for (int j = 0; j < 9; j++) {
             //grid[i][j].loadFromFile("img/grid.png", gameRenderer);
-            pea[i][j].animationLoadFromFile("img/whiteGhost.png", gameRenderer);
+            pea[i][j].animationLoadFromFile("img/appleTreeAttack.png", gameRenderer);
             nut[i][j].animationLoadFromFile("img/blackGhost.png", gameRenderer);
             watermelon[i][j].animationLoadFromFile("img/watermelonRolling.png", gameRenderer);
             girl[i][j].animationLoadFromFile("img/plantGirlAttack.png", gameRenderer);
             for (int k = 0; k < 2; k++) {
-                peaBullet[i][j][k].loadFromFile("img/peaBullet.png", gameRenderer);
+                peaBullet[i][j][k].loadFromFile("img/appleBullet.png", gameRenderer);
             }
         }
 	}
@@ -229,8 +230,27 @@ void Game::eventPrepare(const SDL_Event& eventListener) {
         }
     } else if (gDisplayType == PAUSE) {
         resumeButton.handleEvent(eventListener);
-        replayButton.handleEvent(eventListener);
-        exitButton.handleEvent(eventListener);
+        if (replayButton.handleEvent(eventListener) || exitButton.handleEvent(eventListener)) {
+            time(&num);
+            count = 0;
+            coin.setCurrentCoin();
+            for (int i = 0; i < 5; i++) {
+                mower[i].setPos();
+                for (int j = 0; j < 20; j++) {
+                    ghost[i][j].setPos();
+                    ghost[i][j].setMoving(false);
+                }
+                for (int j = 0; j < 9; j++) {
+                    pea[i][j].setHP(100);
+                    nut[i][j].setHP(1000);
+                    watermelon[i][j].setHP(150);
+                    girl[i][j].setHP(30);
+                    for (int k = 0; k < 2; k++) {
+                        peaBullet[i][j][k].setNowPos();
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -248,26 +268,32 @@ void Game::autoPrepare() {
         for (int i = 0; i < 5; i++) {
             if (eNum[i] > killedeNum[i]) existingEnemy[i] = true;
             else existingEnemy[i] = false;
-            for (int j = 0; j < 20; j++) {
+            for (int j = killedeNum[i]; j < 20; j++) {
                 if(ghost[i][j].getMoving() && !checkCollision(ghost[i][j], i, (ghost[i][j].getPos().x - grid[0][0].getPos().x) / grid[0][0].getWidth())) {
                     ghost[i][j].move();
                 }
+                checkCollision(ghost[i][j], mower[i]);
             }
-
-            if(count < 100){
-                if(SDL_GetTicks() - iTick >= 3000){
+            if (count < 100){
+                if (count) {
+                    int time = 5000 - 7 * count * count;
+                    if(SDL_GetTicks() - iTick >= time){
+                        iTick = SDL_GetTicks();
+                        ghost[eSequence[num]][eNum[eSequence[num]]].setMoving(true);
+                        eNum[eSequence[num]]++;
+                        count++;
+                        num++;
+                        num %= 100;
+                    }
+                } else {
                     iTick = SDL_GetTicks();
-                    ghost[eSequence[(SDL_GetTicks()/3000) % 100]][eNum[eSequence[(SDL_GetTicks()/3000) % 100]]].setMoving(true);
-                    eNum[eSequence[(SDL_GetTicks()/3000) % 100]]++;
                     count++;
                 }
             }
-
             commodity[i].setReady(i);
             if (mower[i].getMoving()) mower[i].move();
-            if (mower[i].getPos().x > SCREEN_WIDTH) {
+            if (mower[i].getPos().x > SCREEN_WIDTH + 200) {
                 mower[i].setMoving(false);
-                mower[i].~Mower();
             }
             for (int j = 0; j < 9; j++) {
                 pea[i][j].setAnimationType(MOVING);
@@ -277,7 +303,7 @@ void Game::autoPrepare() {
                     pea[i][j].setAnimationType(ATTACKTING);
                     watermelon[i][j].setAnimationType(ATTACKTING);
                     if (grid[i][j].getMPlantType() == PEA) {
-                        if (pea[i][j].getFrame() == 60) {
+                        if (pea[i][j].getFrame() == 180) {
                             if (peaBullet[i][j][0].getReady()) {
                                 peaBullet[i][j][0].setMoving(true);
                                 peaBullet[i][j][0].setReady(false);
@@ -291,7 +317,10 @@ void Game::autoPrepare() {
             }
             for (int j = 0; j < 9; j++) {
                 for (int k = 0; k < 2; k++) {
-                    if (peaBullet[i][j][k].getMoving()) peaBullet[i][j][k].move();
+                    if (peaBullet[i][j][k].getMoving()) {
+                        peaBullet[i][j][k].move();
+                        checkCollision(ghost[i][killedeNum[i]], peaBullet[i][j][k]);
+                    }
                     if (peaBullet[i][j][k].getNowPos().x > SCREEN_WIDTH) {
                         peaBullet[i][j][k].setNowPos();
                         peaBullet[i][j][k].setMoving(false);
@@ -484,7 +513,30 @@ void Game::checkCollision(Enemies &enemy, PeaBullet &peaBullet){
         peaBullet.setReady(true);
         //-----------------------------------------
         if(enemy.getHP() <= 0){
-
+            killedeNum[enemy.getRow()]++;
+            enemy.setPos();
+            enemy.setMoving(false);
         }
     }
+}
+
+void Game::checkCollision(Enemies &enemy, Mower &mower){
+    if(enemy.getPos().x - mower.getPos().x < mower.getWidth() * 3 / 4 && enemy.getPos().x < SCREEN_WIDTH - 600){
+        killedeNum[enemy.getRow()]++;
+        enemy.setPos();
+        enemy.setMoving(false);
+        mower.setMoving(true);
+    }
+}
+
+int Game::checkEnding() {
+    if (count == 100) return 2;
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < killedeNum[i]; j++) {
+            if (ghost[i][j].getPos().x < grid[i][0].getPos().x - 100) {
+                return 1;
+            }
+        }
+    }
+    return 0;
 }

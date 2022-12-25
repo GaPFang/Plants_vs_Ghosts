@@ -21,7 +21,7 @@ class Button: public LTexture {
         double getWidth();
         double getHeight();
         SDL_Point getPos();
-        void handleEvent(const SDL_Event &eventListener);
+        bool handleEvent(const SDL_Event &eventListener);
 };
 
 #endif // _BUTTON_H

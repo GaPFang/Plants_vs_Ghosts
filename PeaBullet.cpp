@@ -54,6 +54,6 @@ void PeaBullet::move() {
     nowPos.x += M_SPD;
 }
 
-const double PeaBullet::width = 10, PeaBullet::height = 10;
-int PeaBullet::ATK = 10;
+const double PeaBullet::width = 30, PeaBullet::height = 30;
+int PeaBullet::ATK = 20;
 const int PeaBullet::M_SPD = 4;

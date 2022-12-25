@@ -33,7 +33,7 @@ void Enemies::setID(int id) {
 }
 
 void Enemies::setPos() {
-    mPos.x = SCREEN_WIDTH;
+    mPos.x = SCREEN_WIDTH - 200;
     mPos.y = gPos.y + height * row + (height - width) / 2;
 }
 
@@ -47,6 +47,10 @@ double Enemies::getATK(){
 
 double Enemies::getHP() {
     return HP;
+}
+
+int Enemies::getRow() {
+    return row;
 }
 
 void Enemies::HPdamaged(double damage) {HP -= damage;}

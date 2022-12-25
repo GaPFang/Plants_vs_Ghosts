@@ -23,6 +23,7 @@ class Coin: public LTexture{
         void coinCountUp();
         //void setiTick(Uint32 tick);
         int getCurrentCoin();
+        void setCurrentCoin();
 
     private:
         Uint32 iTick = SDL_GetTicks();
