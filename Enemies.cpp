@@ -33,7 +33,7 @@ void Enemies::setID(int id) {
 }
 
 void Enemies::setPos() {
-    mPos.x = SCREEN_WIDTH - 200;
+    mPos.x = SCREEN_WIDTH;
     mPos.y = gPos.y + height * row + (height - width) / 2;
 }
 

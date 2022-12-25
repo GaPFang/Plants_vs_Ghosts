@@ -33,6 +33,8 @@ class Game{
         LTexture levelSelectionBackgroundTexture;
         LTexture mainGameBackgroundTexture;
         LTexture pauseBackgroundTexture;
+        LTexture winGame;
+        LTexture loseGame;
         PlantFollowingMouse plantFollowingMouse[5];
         Grid grid[5][9];
         Sunflower sunflower[5][9];
@@ -62,6 +64,9 @@ class Game{
         int killedeNum[5] = {0};
         int count = 0;
         time_t num;
+        bool gameEnded = false;
+        bool gameWon = false;
+        bool gameLose = false;
     public:
         Game();
         void init();
@@ -77,6 +82,7 @@ class Game{
         void checkCollision(Enemies &enemy, PeaBullet &peaBullet, PlantType plantType);
         void checkCollision(Enemies &enemy, Mower &mower);
         int checkEnding();
+        bool gameEnd(int, int);
 };
 
 #endif // _GAME_H

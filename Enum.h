@@ -7,6 +7,8 @@ enum DisplayType {
     MAINGAME,
     PAUSE,
     SETTINGS,
+    WIN,
+    LOSE,
     DISPLAYTYPE_TOTAL
 };
 

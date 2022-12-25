@@ -22,7 +22,6 @@ Game::Game(){
     exitButton.setPosY(487);
     exitButton.setMDisplayType(LEVEL_SELECTION);
     exitButton.setMMusicType(MUSIC_HALT);
-
     for (int i = 0; i < 5; i++) {
         commodity[i].setPosX(commodity[i].getGPos().x);
         commodity[i].setPosY(commodity[i].getGPos().y + commodity[i].getHeight() * i);
@@ -98,6 +97,8 @@ void Game::loadMedia() {
 	levelSelectionBackgroundTexture.loadFromFile("img/levelSelection.png", gameRenderer);
 	mainGameBackgroundTexture.loadFromFile("img/backgroundNormal.png", gameRenderer);
 	pauseBackgroundTexture.loadFromFile("img/pause.jpg", gameRenderer);
+    winGame.loadFromFile("img/win.jpg", gameRenderer);
+    loseGame.loadFromFile("img/lose.jpg", gameRenderer);
 	playButton.loadFromFile("img/playButton.png", gameRenderer);
 	pauseButton.loadFromFile("img/pauseButton.png", gameRenderer);
 	resumeButton.loadFromFile("img/resumeButton.jpg", gameRenderer);
@@ -362,6 +363,7 @@ void Game::autoPrepare() {
                         peaBullet[i][j][k].setReady(true);
                     }
                 }
+                gameEnd(i, j);
             }
         }
         if( Mix_PlayingMusic() == 0 ) {
@@ -506,6 +508,10 @@ void Game::renderPresent() {
         resumeButton.render(resumeButton.getPos().x, resumeButton.getPos().y, gameRenderer);
         replayButton.render(replayButton.getPos().x, replayButton.getPos().y, gameRenderer);
         exitButton.render(exitButton.getPos().x, exitButton.getPos().y, gameRenderer);
+    } else if(gDisplayType == WIN) {
+        winGame.render(0, 0, gameRenderer);
+    } else if(gDisplayType == LOSE){
+        loseGame.render(0, 0, gameRenderer);
     }
     SDL_RenderPresent( gameRenderer );
 }
@@ -607,4 +613,27 @@ int Game::checkEnding() {
         }
     }
     return 0;
+}
+
+bool Game::gameEnd(int i, int j){
+    int killedTotal = 0;
+    for(int k = 0; k < 5; k++){
+        killedTotal += killedeNum[k];
+    }
+    if(killedTotal == 100){
+        gameEnded = true;
+        gameWon = true;
+        gameLose = false;
+        gDisplayType = WIN;
+        std::cout << gDisplayType << std::endl;
+        return true;
+    } else if(ghost[i][j].getPos().x /* < GIMME THIS COORDINATE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/){
+        gameEnded = true;
+        gameWon = false;
+        gameLose = true;
+        gDisplayType = LOSE;
+        std::cout << gDisplayType << std::endl;
+        return true;
+    }
+    return false;
 }
