@@ -235,8 +235,8 @@ void Game::eventPrepare(const SDL_Event& eventListener) {
 }
 
 void Game::autoPrepare() {
+    coin.coinCountUp();
     if (gDisplayType == MAINGAME) {
-        //coin.coinCountUp();
         progressBar.setTicksAfterStart();
         progressBar.setProgress();
         if (gPlantType != PLANT_TOTAL) {
@@ -253,11 +253,16 @@ void Game::autoPrepare() {
                     ghost[i][j].move();
                 }
             }
-            if(SDL_GetTicks() - iTick >= 3000){
-                iTick = SDL_GetTicks();
-                ghost[eSequence[SDL_GetTicks()/3000]][eNum[eSequence[SDL_GetTicks()/3000]]].setMoving(true);
-                eNum[eSequence[SDL_GetTicks()/3000]]++;
+
+            if(count < 100){
+                if(SDL_GetTicks() - iTick >= 3000){
+                    iTick = SDL_GetTicks();
+                    ghost[eSequence[(SDL_GetTicks()/3000) % 100]][eNum[eSequence[(SDL_GetTicks()/3000) % 100]]].setMoving(true);
+                    eNum[eSequence[(SDL_GetTicks()/3000) % 100]]++;
+                    count++;
+                }
             }
+
             commodity[i].setReady(i);
             if (mower[i].getMoving()) mower[i].move();
             if (mower[i].getPos().x > SCREEN_WIDTH) {

@@ -1,4 +1,7 @@
 #include "Coin.h"
+#include "Variables.h"
+
+extern DisplayType gDisplayType;
 
 bool Coin::loadMedia(std::string Text, SDL_Renderer* gRenderer){
     //Loading success flag
@@ -96,10 +99,33 @@ void Coin::print(SDL_Renderer* gameRenderer){
 }
 
 void Coin::coinCountUp(){
-    if(SDL_GetTicks() - iTick >= coinInterval){
+    if(gDisplayType == PAUSE){
+        if(pauseTickDefined == false){
+            pauseTickDefined = true;
+            pauseTick = SDL_GetTicks();
+        }
+    } else if(gDisplayType == MAINGAME && pauseTickDefined == true){
+        pauseTickDefined = false;
+        iTick += SDL_GetTicks() - pauseTick;
+        if(SDL_GetTicks() - iTick >= coinInterval){
+            iTick = SDL_GetTicks();
+            currentCoin += 50;
+        }
+    } else if(gameStarted == false && gDisplayType == MAINGAME){
+        gameStarted = true;
         iTick = SDL_GetTicks();
-        currentCoin += 50;
+        if(SDL_GetTicks() - iTick >= coinInterval){
+            iTick = SDL_GetTicks();
+            currentCoin += 50;
+        }
+    } else if(gameStarted == true && gDisplayType == MAINGAME){
+        if(SDL_GetTicks() - iTick >= coinInterval){
+            iTick = SDL_GetTicks();
+            currentCoin += 50;
+        }
     }
+
+
 }
 
 void Coin::deductCoin(int price){
