@@ -11,11 +11,11 @@ enum DisplayType {
 };
 
 enum PlantType {
+    SUNFLOWER,
 	PEA,
 	NUT,
+	WATERMELON,
 	GIRL,
-	BANANA,
-	CAT,
 	PLANT_TOTAL
 };
 

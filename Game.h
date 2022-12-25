@@ -13,12 +13,16 @@
 #include "Pea.h"
 #include "Nut.h"
 #include "PeaBullet.h"
+#include "Watermelon.h"
 #include "Girl.h"
 #include "Ghost.h"
 #include "Mower.h"
 #include "Button.h"
 #include "Shovel.h"
 #include "Coin.h"
+#include "Progress.h"
+
+extern bool existingEnemy[5];
 
 class Game{
     private:
@@ -31,6 +35,7 @@ class Game{
         Grid grid[5][9];
         Pea pea[5][9];
         Nut nut[5][9];
+        Watermelon watermelon[5][9];
         Girl girl[5][9];
         Mower mower[5];
         Ghost ghost[5][20];
@@ -40,12 +45,16 @@ class Game{
         Button level[5];
         Button pauseButton;
         Button resumeButton, replayButton, exitButton;
+        Progress progressBar;
+        Progress progressBackground;
         Mix_Music *menuMusic = NULL;
         Mix_Music *mainGameMusic = NULL;
         Shovel shovel;
-        Coin coin;int iTick;
+        Coin coin;
+        int iTick;
         int eSequence[100] = {1,3,1,2,3,4,0,1,1,1,4,3,0,2,0,0,4,4,2,3,1,3,2,1,3,2,0,3,3,2,2,4,2,2,2,4,4,4,2,3,0,1,3,2,3,0,4,4,2,1,2,1,0,0,3,4,1,0,2,3,2,0,1,4,4,4,3,1,4,3,1,3,4,2,0,2,0,4,2,1,1,0,4,1,3,3,1,4,0,0,1,3,0,4,2,0,0,3,0,1};
         int eNum[5] = {0};
+        int killedeNum[5] = {0};
     public:
         Game();
         void init();

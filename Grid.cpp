@@ -59,19 +59,7 @@ void Grid::handleEvent(const SDL_Event& eventListener) {
         }
     }
 }
-
-void Grid::setMPlantType(PlantType t) {
-    mPlantType = t;
-}
-
-void Grid::collide(){
-    collided = true;
-}
-
-void Grid::resetCollide(){
-    collided = false;
-}
-
+void Grid::resetCollide(){}
 int Grid::getmPosX(){
     return mPos.x;
 }

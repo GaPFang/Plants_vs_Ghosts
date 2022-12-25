@@ -10,7 +10,7 @@ class Enemies: public Animation{
 protected:
     static const double width, height;
     static const SDL_Point gPos;
-    static const int A_SPD = 1;
+    static const int M_SPD;
     SDL_Point mPos;
     int HP = 100;
     const int ATK = 10;
