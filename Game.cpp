@@ -534,6 +534,7 @@ bool Game::checkCollision(Enemies &enemy, int i, int j){
                 case PEA:
 
                     pea[i][j].HPdamaged(enemy.getATK());
+                    std::cout << "pea = " << pea[i][j].getHP() << std::endl;
                     if (pea[i][j].getHP() <= 0) {
 
                         grid[i][j].setMPlantType(PLANT_TOTAL);
@@ -542,6 +543,7 @@ bool Game::checkCollision(Enemies &enemy, int i, int j){
                     break;
                 case NUT:
                     nut[i][j].HPdamaged(enemy.getATK());
+                    std::cout << "nut = " << nut[i][j].getHP() << std::endl;
                     if (nut[i][j].getHP() <= 0) {
                         grid[i][j].setMPlantType(PLANT_TOTAL);
                         nut[i][j].setHP(142);
@@ -557,6 +559,7 @@ bool Game::checkCollision(Enemies &enemy, int i, int j){
                 case GIRL:
                     girl[i][j].HPdamaged(enemy.getATK());
                     enemy.HPdamaged(girl[i][j].getATK());
+                    std::cout << "GirlHP = " << girl[i][j].getHP() << std::endl;
                     if (girl[i][j].getHP() <= 0) {
                         grid[i][j].setMPlantType(PLANT_TOTAL);
                         girl[i][j].setHP(142);
